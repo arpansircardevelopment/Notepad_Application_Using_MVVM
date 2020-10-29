@@ -3,7 +3,7 @@ package com.arpansircar.java.notepadapplicationusingmvvm.model;
 /**
  * The Constants class is tasked with saving information that will remain constants throughout the entirety of the program.
  * With the help of the Constants class, all these values are grouped into a single place.
- * In the event that we might need to change any of these values, we can do so easily ensuringthat any change is reflected everywhere in the application.
+ * In the event that we might need to change any of these values, we can do so easily ensuring that any change is reflected everywhere in the application.
  */
 
 /*The Constant class has been attributed as a final class.
