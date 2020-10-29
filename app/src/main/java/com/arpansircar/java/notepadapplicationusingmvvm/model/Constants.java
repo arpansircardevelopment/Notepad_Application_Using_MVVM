@@ -14,5 +14,8 @@ public final class Constants {
     public static final String COLUMN_NAME_DATE = "column_date";
 
     /*Query Constants*/
+    public static final String QUERY_ALL_NOTES = "SELECT * FROM " + TABLE_NAME;
+    public static final String QUERY_SINGLE_NOTE = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = :noteID";
+    public static final String DELETE_ALL_NOTES = "DELETE FROM " + TABLE_NAME;
 
 }
