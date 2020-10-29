@@ -11,5 +11,6 @@
     <color name="color_primary_dark">#AE58DF</color>
     <color name="color_primary">#D078E1</color>
     <color name="color_accent">#978FEC</color>
+    <color name="muted_white">#FFFAFA</color>
 
 </resources>

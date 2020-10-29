@@ -2,4 +2,6 @@
     <string name="app_name">Notepad Application Using MVVM</string>
     <string name="sample_toolbar_title">Sample Toolbar Title</string>
     <string name="add_new_note">Add New Note</string>
+    <string name="sample_title">Sample Title</string>
+    <string name="done_button">Done Button</string>
 </resources>
