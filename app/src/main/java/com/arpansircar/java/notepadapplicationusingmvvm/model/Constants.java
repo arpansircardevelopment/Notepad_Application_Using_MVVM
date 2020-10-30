@@ -7,7 +7,7 @@ package com.arpansircar.java.notepadapplicationusingmvvm.model;
  */
 
 /*The Constant class has been attributed as a final class.
- *Using a the final keyword here ensures that the class cannot be extended.*/
+ *Using the final keyword here ensures that the class cannot be extended.*/
 public final class Constants {
 
     /*A final constructor ensures that this class cannot be instantiated.*/
