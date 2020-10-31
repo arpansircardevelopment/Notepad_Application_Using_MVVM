@@ -20,7 +20,7 @@ public class NotesRepository {
     private final NotesDAO notesDAO;
 
     /*The NotesDAO instance is initialized in the constructor itself.
-     * As a result of this, as soon as this NotesRepository class is initialized, the NotesDAO instance is initialized as well.*/
+     * As a result of this, as soon as this NotesRepository class is initialized, the NotesDAO instance is initialized too.*/
     public NotesRepository() {
         notesDAO = NotesDatabase.notesDatabase.notesDAO();
     }
