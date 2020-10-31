@@ -25,7 +25,7 @@ public abstract class NotesDatabase extends RoomDatabase {
     /*The initializeDatabase(...) method is a singleton method.
      * This method will be used for creating an instance of RoomDatabase, only if there isn't a instance of the database already present.
      * Apart from building the RoomDatabase instance, the method also ensures that queries can be performed on the main thread.*/
-    public void initializeDatabase(Context context) {
+    public static void initializeDatabase(Context context) {
         if (notesDatabase == null) {
             notesDatabase = Room
                     .databaseBuilder(context, NotesDatabase.class, Constants.DATABASE_NAME)
@@ -36,7 +36,7 @@ public abstract class NotesDatabase extends RoomDatabase {
     }
 
     /*Once the database instance is created, the getInstance() method will be used to return the database instance.*/
-    public static NotesDatabase getInstance() {
+    public NotesDatabase getInstance() {
         return notesDatabase;
     }
 }
