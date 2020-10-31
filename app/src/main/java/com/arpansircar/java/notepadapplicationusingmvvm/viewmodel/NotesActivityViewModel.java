@@ -20,4 +20,8 @@ public class NotesActivityViewModel extends ViewModel {
         return notesRepository.selectAllNotesMethod();
     }
 
+    public void deleteAllNotesMethod() {
+        notesRepository.deleteAllNotesMethod();
+    }
+
 }
