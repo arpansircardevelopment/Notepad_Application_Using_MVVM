@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.ActivityNotesBinding;
+import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesDatabase;
 
 public class NotesActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -18,7 +19,12 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityNotesBinding = DataBindingUtil.setContentView(this, R.layout.activity_notes);
+        initializeDatabase();
         setOnClickListenerMethod();
+    }
+
+    private void initializeDatabase() {
+        NotesDatabase.initializeDatabase(getApplicationContext());
     }
 
     private void setOnClickListenerMethod() {

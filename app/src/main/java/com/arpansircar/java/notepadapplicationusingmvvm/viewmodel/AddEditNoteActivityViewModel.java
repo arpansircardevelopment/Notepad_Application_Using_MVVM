@@ -12,13 +12,7 @@ import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 
 public class AddEditNoteActivityViewModel extends ViewModel {
 
-    private final NotesRepository notesRepository;
-
-    /*A NotesRepository instance will be created every time the ViewModel class is instantiated.
-     * This instance will be used for performing all the database operations via the repository class.*/
-    public AddEditNoteActivityViewModel() {
-        notesRepository = new NotesRepository();
-    }
+    private final NotesRepository notesRepository = new NotesRepository();
 
     /*The insertNoteMethod(...) will be called when the user creates a new note.*/
     public void insertNoteMethod(NotesEntity notesEntity) {

@@ -17,20 +17,20 @@ public class NotesEntity {
      * This value will be used as the Primary Key and will used for performing all the transactions.*/
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Constants.COLUMN_ID)
-    public int id;
+    private int id;
 
     /*The title variable will be used for storing the title of a particular note.*/
     @ColumnInfo(name = Constants.COLUMN_NAME_TITLE)
-    public String title;
+    private String title;
 
     /*The content variable will be used for storing the content value of a particular note.*/
     @ColumnInfo(name = Constants.COLUMN_NAME_CONTENT)
-    public String content;
+    private String content;
 
     /*The date variable will used for storing the date of a particular note.
      * This date value will be displayed only in the RecyclerView.*/
     @ColumnInfo(name = Constants.COLUMN_NAME_DATE)
-    public String date;
+    private String date;
 
     public int getId() {
         return id;
