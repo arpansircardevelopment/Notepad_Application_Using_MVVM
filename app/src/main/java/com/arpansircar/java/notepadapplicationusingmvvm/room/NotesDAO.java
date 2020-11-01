@@ -1,6 +1,7 @@
 package com.arpansircar.java.notepadapplicationusingmvvm.room;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -14,6 +15,7 @@ import java.util.List;
  * The NotesDAO interface contains the Data Access Objects.
  * These DAOs are used for accessing the data present within the database.
  */
+@Dao
 public interface NotesDAO {
 
     /*The insertNote(...) method is to be used for inserting the NotesEntity object within the database.*/

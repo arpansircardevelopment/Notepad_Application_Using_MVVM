@@ -9,8 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NotepadApplicationUsingMVVM">
-        <activity android:name=".view.DisplayNoteActivity"></activity>
-        <activity android:name=".view.AddEditNoteActivity" />
+        <activity android:name=".view.DisplayNoteActivity" />
+        <activity
+            android:name=".view.AddEditNoteActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".view.NotesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

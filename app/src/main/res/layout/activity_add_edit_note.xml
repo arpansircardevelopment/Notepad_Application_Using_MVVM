@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/muted_white">
+        android:fitsSystemWindows="true">
 
         <LinearLayout
             android:id="@+id/toolbar_linear_layout"
@@ -34,12 +34,12 @@
             android:id="@+id/title_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:fontFamily="@font/nunito_bold"
+            android:hint="@string/enter_title_hint_string"
             android:importantForAutofill="no"
             android:inputType="text"
             android:padding="15dp"
-            android:text="@string/sample_title"
-            android:textColor="@color/black"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,13 +50,13 @@
             android:id="@+id/content_edit_text"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@android:color/transparent"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start"
+            android:hint="@string/enter_content_hint_string"
             android:importantForAutofill="no"
             android:inputType="text"
             android:padding="15dp"
-            android:text="@string/sample_title"
-            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
