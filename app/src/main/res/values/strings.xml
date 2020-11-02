@@ -6,5 +6,6 @@
     <string name="done_button">Done Button</string>
     <string name="enter_title_hint_string">Enter note title</string>
     <string name="enter_content_hint_string">Enter note content</string>
-    <string name="delete_menu_option">Delete</string>
+    <string name="delete_menu_string">Delete</string>
+    <string name="display_activity_sample_text">Display Activity</string>
 </resources>

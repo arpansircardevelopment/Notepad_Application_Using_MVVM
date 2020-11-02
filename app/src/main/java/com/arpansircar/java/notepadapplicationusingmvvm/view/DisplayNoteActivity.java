@@ -1,12 +1,17 @@
 package com.arpansircar.java.notepadapplicationusingmvvm.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.ActivityDisplayNoteBinding;
@@ -16,12 +21,14 @@ import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.DisplayNoteAct
 public class DisplayNoteActivity extends AppCompatActivity {
 
     private ActivityDisplayNoteBinding activityDisplayNoteBinding;
+    private NotesEntity currentNoteEntity;
     private DisplayNoteActivityViewModel displayNoteActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityDisplayNoteBinding = DataBindingUtil.setContentView(this, R.layout.activity_display_note);
+        setToolbarMethod();
         initializeViewModel();
     }
 
@@ -31,13 +38,35 @@ public class DisplayNoteActivity extends AppCompatActivity {
         startObserver();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.display_note_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.delete_menu_option) {
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setToolbarMethod() {
+        Toolbar toolbar = activityDisplayNoteBinding.toolbar.activityToolbar;
+        toolbar.setTitle(R.string.display_activity_sample_text);
+        setSupportActionBar(toolbar);
+    }
+
     private void initializeViewModel() {
         displayNoteActivityViewModel = new ViewModelProvider(this).get(DisplayNoteActivityViewModel.class);
     }
 
     private void startObserver() {
-        final Observer<NotesEntity> notesActivityObserver = this::setNoteInActivity;
-        displayNoteActivityViewModel.selectNoteMethod(getIntentData()).observe(this, notesActivityObserver);
+        final Observer<NotesEntity> notesEntityObserver = this::setNoteInActivity;
+        displayNoteActivityViewModel.selectNoteMethod(getIntentData()).observe(this, notesEntityObserver);
     }
 
     private void setNoteInActivity(NotesEntity notesEntity) {
@@ -48,6 +77,11 @@ public class DisplayNoteActivity extends AppCompatActivity {
     private int getIntentData() {
         Intent intent = getIntent();
         return intent.getIntExtra("noteID", -1);
+    }
+
+    private void deleteNoteMethod() {
+        displayNoteActivityViewModel.deleteNoteMethod(currentNoteEntity);
+        finish();
     }
 
 }
