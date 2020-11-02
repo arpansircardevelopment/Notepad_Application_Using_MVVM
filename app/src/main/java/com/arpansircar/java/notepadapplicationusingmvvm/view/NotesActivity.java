@@ -20,7 +20,7 @@ import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.NotesActivityV
 import java.util.List;
 
 /**
- * The onCreate method is the primary activity in the entire applications.
+ * The NotesActivity is the primary activity in the entire applications.
  * This activity starts up and shows the user all the notes that have been created or the facility to add a new note using the floating action button.
  * All the notes that have been created using this application and short details associated with them show up in the RecyclerView.
  * The user can click on any of these notes to view the complete details of the note.
