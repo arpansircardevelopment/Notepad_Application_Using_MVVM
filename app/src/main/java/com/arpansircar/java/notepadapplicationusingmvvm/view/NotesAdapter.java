@@ -75,6 +75,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             this.iNotesActivity = iNotesActivity;
         }
 
+        /*The onClick(...) method is used when we click a particular view present in the RecyclerView.
+         * When the user clicks on a particular note, this method stores the object for that particular note from the list.
+         * Next, the noteID is acquired from the object and is sent to the NotesActivity via the iNotesActivity interface.*/
         @Override
         public void onClick(View view) {
             NotesEntity notesEntity = notesEntityList.get(getAdapterPosition());
