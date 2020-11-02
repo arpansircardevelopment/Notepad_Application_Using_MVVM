@@ -63,7 +63,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     }
 
     /*The NotesViewHolder class is used to hold each of the views for each of the objects present in the notesEntitiesList list.*/
-    public static class NotesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class NotesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final IndividualItemsLayoutBinding individualItemsLayoutBinding;
         private final iNotesActivity iNotesActivity;
@@ -77,7 +77,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
         @Override
         public void onClick(View view) {
-            iNotesActivity.onNoteClicked(getAdapterPosition());
+            NotesEntity notesEntity = notesEntityList.get(getAdapterPosition());
+            iNotesActivity.onNoteClicked(notesEntity.getId());
         }
     }
 

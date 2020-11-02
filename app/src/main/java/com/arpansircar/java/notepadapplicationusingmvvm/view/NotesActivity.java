@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
@@ -31,7 +30,6 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
 
     private ActivityNotesBinding activityNotesBinding;
     private NotesActivityViewModel notesActivityViewModel;
-    private static final String TAG = "NotesActivity";
 
     /*The onCreate method is the first method that is executed when the application starts up.
      * Usually, in this method, such functions are executed that are to be performed only once.
@@ -109,9 +107,9 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onNoteClicked(int position) {
+    public void onNoteClicked(int noteID) {
         Intent intent = new Intent(NotesActivity.this, DisplayNoteActivity.class);
-        intent.putExtra("position", position);
+        intent.putExtra("noteID", noteID);
         startActivity(intent);
     }
 }

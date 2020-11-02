@@ -42,7 +42,7 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar_linear_layout" />
 
         <TextView
-            android:id="@+id/content_edit_text"
+            android:id="@+id/content_text_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fontFamily="@font/nunito_bold"
