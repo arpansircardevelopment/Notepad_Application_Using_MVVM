@@ -24,6 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito"
+                android:singleLine="true"
                 android:text="@{noteDetails.title}"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -32,7 +33,9 @@
                 android:id="@+id/content_text_card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:fontFamily="@font/nunito_extralight"
+                android:maxLines="5"
                 android:text="@{noteDetails.content}"
                 android:textSize="20sp" />
 
@@ -42,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/nunito_bold"
+                android:singleLine="true"
                 android:text="@{noteDetails.date}"
                 android:textSize="17sp" />
 
