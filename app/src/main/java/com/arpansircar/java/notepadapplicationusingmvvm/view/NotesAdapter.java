@@ -1,6 +1,7 @@
 package com.arpansircar.java.notepadapplicationusingmvvm.view;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.IndividualItemsLayoutBinding;
+import com.arpansircar.java.notepadapplicationusingmvvm.model.iNotesActivity;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 
 import java.util.List;
@@ -21,9 +23,11 @@ import java.util.List;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
 
     private final List<NotesEntity> notesEntityList;
+    private final iNotesActivity iNotesActivity;
 
-    public NotesAdapter(List<NotesEntity> notesEntityList) {
+    public NotesAdapter(List<NotesEntity> notesEntityList, iNotesActivity iNotesActivity) {
         this.notesEntityList = notesEntityList;
+        this.iNotesActivity = iNotesActivity;
     }
 
     /*The onCreateViewHolder() method configures and returns the views for all the different objects present in the List.*/
@@ -37,7 +41,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
                 false
         );
 
-        return new NotesViewHolder(individualItemsLayoutBinding);
+        return new NotesViewHolder(individualItemsLayoutBinding, iNotesActivity);
     }
 
     /*The onBindViewHolder(...) method receives the views individually from the NotesViewHolder class.
@@ -59,13 +63,21 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     }
 
     /*The NotesViewHolder class is used to hold each of the views for each of the objects present in the notesEntitiesList list.*/
-    public static class NotesViewHolder extends RecyclerView.ViewHolder {
+    public static class NotesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final IndividualItemsLayoutBinding individualItemsLayoutBinding;
+        private final iNotesActivity iNotesActivity;
 
-        public NotesViewHolder(@NonNull IndividualItemsLayoutBinding individualItemsLayoutBinding) {
+        public NotesViewHolder(@NonNull IndividualItemsLayoutBinding individualItemsLayoutBinding, iNotesActivity iNotesActivity) {
             super(individualItemsLayoutBinding.getRoot());
             this.individualItemsLayoutBinding = individualItemsLayoutBinding;
+            individualItemsLayoutBinding.getRoot().setOnClickListener(this);
+            this.iNotesActivity = iNotesActivity;
+        }
+
+        @Override
+        public void onClick(View view) {
+            iNotesActivity.onNoteClicked(getAdapterPosition());
         }
     }
 

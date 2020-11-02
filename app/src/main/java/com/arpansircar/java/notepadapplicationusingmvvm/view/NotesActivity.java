@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.ActivityNotesBinding;
+import com.arpansircar.java.notepadapplicationusingmvvm.model.iNotesActivity;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesDatabase;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.NotesActivityViewModel;
@@ -25,10 +27,11 @@ import java.util.List;
  * All the notes that have been created using this application and short details associated with them show up in the RecyclerView.
  * The user can click on any of these notes to view the complete details of the note.
  */
-public class NotesActivity extends AppCompatActivity implements View.OnClickListener {
+public class NotesActivity extends AppCompatActivity implements View.OnClickListener, iNotesActivity {
 
     private ActivityNotesBinding activityNotesBinding;
     private NotesActivityViewModel notesActivityViewModel;
+    private static final String TAG = "NotesActivity";
 
     /*The onCreate method is the first method that is executed when the application starts up.
      * Usually, in this method, such functions are executed that are to be performed only once.
@@ -83,7 +86,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
      * Accordingly, the RecyclerView is populated with the required views and a new RecyclerView is displayed with the newly added notes.*/
     private void setRecyclerViewMethod(List<NotesEntity> notesEntityList) {
         RecyclerView recyclerView = activityNotesBinding.notesListRecyclerView;
-        NotesAdapter notesAdapter = new NotesAdapter(notesEntityList);
+        NotesAdapter notesAdapter = new NotesAdapter(notesEntityList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(false);
         recyclerView.setAdapter(notesAdapter);
@@ -103,5 +106,12 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         if (view == activityNotesBinding.newNoteFloatingActionButton) {
             startActivity(new Intent(NotesActivity.this, AddEditNoteActivity.class));
         }
+    }
+
+    @Override
+    public void onNoteClicked(int position) {
+        Intent intent = new Intent(NotesActivity.this, DisplayNoteActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
     }
 }
