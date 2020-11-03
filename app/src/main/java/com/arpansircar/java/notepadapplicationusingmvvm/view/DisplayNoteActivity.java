@@ -23,12 +23,14 @@ public class DisplayNoteActivity extends AppCompatActivity {
     private ActivityDisplayNoteBinding activityDisplayNoteBinding;
     private NotesEntity currentNoteEntity;
     private DisplayNoteActivityViewModel displayNoteActivityViewModel;
+    private int currentNoteID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityDisplayNoteBinding = DataBindingUtil.setContentView(this, R.layout.activity_display_note);
         setToolbarMethod();
+        getIntentData();
         initializeViewModel();
     }
 
@@ -48,6 +50,8 @@ public class DisplayNoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.delete_menu_option) {
+            deleteNoteMethod();
+            finish();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -65,22 +69,30 @@ public class DisplayNoteActivity extends AppCompatActivity {
     }
 
     private void startObserver() {
-        final Observer<NotesEntity> notesEntityObserver = this::setNoteInActivity;
-        displayNoteActivityViewModel.selectNoteMethod(getIntentData()).observe(this, notesEntityObserver);
+        final Observer<NotesEntity> notesEntityObserver = notesEntity -> {
+            this.currentNoteEntity = notesEntity;
+            setNoteInActivity(notesEntity);
+        };
+
+        displayNoteActivityViewModel.selectNoteMethod(currentNoteID).observe(this, notesEntityObserver);
     }
 
     private void setNoteInActivity(NotesEntity notesEntity) {
-        activityDisplayNoteBinding.titleTextView.setText(notesEntity.getTitle());
-        activityDisplayNoteBinding.contentTextView.setText(notesEntity.getContent());
+        if (currentNoteID != -1) {
+            activityDisplayNoteBinding.titleTextView.setText(notesEntity.getTitle());
+            activityDisplayNoteBinding.contentTextView.setText(notesEntity.getContent());
+        }
     }
 
-    private int getIntentData() {
+    private void getIntentData() {
         Intent intent = getIntent();
-        return intent.getIntExtra("noteID", -1);
+        currentNoteID = intent.getIntExtra("noteID", -1);
     }
 
     private void deleteNoteMethod() {
+        currentNoteID = -1;
         displayNoteActivityViewModel.deleteNoteMethod(currentNoteEntity);
+        Toast.makeText(this, "Note Deleted", Toast.LENGTH_SHORT).show();
         finish();
     }
 
