@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.IndividualItemsLayoutBinding;
-import com.arpansircar.java.notepadapplicationusingmvvm.model.iNotesActivity;
+import com.arpansircar.java.notepadapplicationusingmvvm.model.INotesActivity;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 
 import java.util.List;
@@ -23,9 +23,9 @@ import java.util.List;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
 
     private final List<NotesEntity> notesEntityList;
-    private final iNotesActivity iNotesActivity;
+    private final INotesActivity iNotesActivity;
 
-    public NotesAdapter(List<NotesEntity> notesEntityList, iNotesActivity iNotesActivity) {
+    public NotesAdapter(List<NotesEntity> notesEntityList, INotesActivity iNotesActivity) {
         this.notesEntityList = notesEntityList;
         this.iNotesActivity = iNotesActivity;
     }
@@ -66,9 +66,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     public class NotesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final IndividualItemsLayoutBinding individualItemsLayoutBinding;
-        private final iNotesActivity iNotesActivity;
+        private final INotesActivity iNotesActivity;
 
-        public NotesViewHolder(@NonNull IndividualItemsLayoutBinding individualItemsLayoutBinding, iNotesActivity iNotesActivity) {
+        public NotesViewHolder(@NonNull IndividualItemsLayoutBinding individualItemsLayoutBinding, INotesActivity iNotesActivity) {
             super(individualItemsLayoutBinding.getRoot());
             this.individualItemsLayoutBinding = individualItemsLayoutBinding;
             individualItemsLayoutBinding.getRoot().setOnClickListener(this);
@@ -77,7 +77,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
         /*The onClick(...) method is used when we click a particular view present in the RecyclerView.
          * When the user clicks on a particular note, this method stores the object for that particular note from the list.
-         * Next, the noteID is acquired from the object and is sent to the NotesActivity via the iNotesActivity interface.*/
+         * Next, the noteID is acquired from the object and is sent to the NotesActivity via the INotesActivity interface.*/
         @Override
         public void onClick(View view) {
             NotesEntity notesEntity = notesEntityList.get(getAdapterPosition());

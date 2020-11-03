@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.ActivityNotesBinding;
-import com.arpansircar.java.notepadapplicationusingmvvm.model.iNotesActivity;
+import com.arpansircar.java.notepadapplicationusingmvvm.model.INotesActivity;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesDatabase;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.NotesActivityViewModel;
@@ -26,7 +26,7 @@ import java.util.List;
  * All the notes that have been created using this application and short details associated with them show up in the RecyclerView.
  * The user can click on any of these notes to view the complete details of the note.
  */
-public class NotesActivity extends AppCompatActivity implements View.OnClickListener, iNotesActivity {
+public class NotesActivity extends AppCompatActivity implements View.OnClickListener, INotesActivity {
 
     private ActivityNotesBinding activityNotesBinding;
     private NotesActivityViewModel notesActivityViewModel;
@@ -106,6 +106,11 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /*The onNoteClicked(...) method here is an overridden method from the INotesActivity interface.
+     * When a note is clicked in the RecyclerView, the clicked noteID is transferred to this method.
+     * When this method is triggered, an Intent object is created to start the DisplayNoteActivity.java activity.
+     * Within this object, the noteID of the clicked note is sent as an Integer extra to next activity.
+     * Finally, the activity is started.*/
     @Override
     public void onNoteClicked(int noteID) {
         Intent intent = new Intent(NotesActivity.this, DisplayNoteActivity.class);
