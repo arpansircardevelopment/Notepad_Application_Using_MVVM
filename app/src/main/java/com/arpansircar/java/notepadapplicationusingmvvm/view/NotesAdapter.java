@@ -84,5 +84,4 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             iNotesActivity.onNoteClicked(notesEntity.getId());
         }
     }
-
 }
