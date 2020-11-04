@@ -20,11 +20,12 @@ import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.AddEditNoteAct
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * The AddEditNoteActivity is started when the user wants to either add or edit a particular note present in the activity.
- * Once the user has started to perform his desired function, he can press the floating action button to place the note in the database.
- * Upon clicking the button, the note the user is reverted back to the NotesActivity with the new note displayed in the RecyclerView.
+ * Once the user has performed his desired function, he can press the floating action button to place the note in the database.
+ * Upon clicking the button, the note the user is reverted back to the NotesActivity or the DisplayNoteActivity depending on the function performed.
  */
 public class AddEditNoteActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,11 +34,11 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
     private NotesEntity currentNoteEntity;
     private String activityFunction;
 
-    /*The onCreate method is the first method that is executed when the application starts up.
-     * Usually, in this method, such functions are executed that are to be performed only once.
-     * In this method, I've defined one other method to be executed when the application starts
-     * The initializeViewModel() is used to create an instance of the ViewModel class associated with this activity.
-     * This ViewModel will be used to handle any configuration changes.*/
+    /*The onCreate method is the first method to be executed when the application starts up.
+     * Here, those methods are called that are to be executed only once.
+     * This particular method contains the getIntentData() and initializeViewModel() methods.
+     * The getIntentData() method fetches any intent data, if available.
+     * The initializeViewModel() method creates an instance of the AddEditNoteActivityViewModel class.*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,19 +48,23 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         initializeViewModel();
     }
 
-    /*The onStart() is the next method executed after the onCreate() callback method.
-     * In this method, the setOnClickListenerMethod() method is executed to set the click listener for the floating action button.*/
+    /*onStart() lifecycle callback method is executed after onCreate(). Here, the setOnClickListenerMethod() is executed.*/
     @Override
     protected void onStart() {
         super.onStart();
         setOnClickListenerMethod();
     }
 
+    /*The getIntentData() method is used for fetching any intent data if available.
+     * Intent data is available only when this activity is used for editing a particular note.
+     * When getIntentData() is called, it first checks if the function is "edit" or "insert".
+     * In case of "edit", the intent data is fetched and placed into a global instance of the NotesEntity class.
+     * Finally, this instance is passed over to the setNoteInActivity(...) method.*/
     private void getIntentData() {
         Intent intent = getIntent();
         activityFunction = intent.getStringExtra("function");
 
-        if (activityFunction.equals("edit")) {
+        if (Objects.equals(activityFunction, "edit")) {
             currentNoteEntity.setId(intent.getIntExtra(Constants.COLUMN_ID, -1));
             currentNoteEntity.setTitle(intent.getStringExtra(Constants.COLUMN_NAME_TITLE));
             currentNoteEntity.setContent(intent.getStringExtra(Constants.COLUMN_NAME_CONTENT));
@@ -68,6 +73,8 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    /*The setNoteInActivity(...) method sets the note title and content into the respective EditTexts via the NotesEntity parameter instance.
+     * This allows the user to preview the note, earlier written, and edit them accordingly.*/
     private void setNoteInActivity(NotesEntity notesEntity) {
         try {
             activityAddEditNoteBinding.titleEditText.setText(notesEntity.getTitle());
@@ -77,27 +84,31 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    /*The initializeViewModel() method is used for initializing the AddEditNoteActivityViewModel instance with the ViewModel class.*/
+    /*The initializeViewModel() method initializes the AddEditNoteActivityViewModel instance with the ViewModel class.*/
     private void initializeViewModel() {
         addEditNoteActivityViewModel = new ViewModelProvider(this).get(AddEditNoteActivityViewModel.class);
     }
 
-    /*The setOnClickListenerMethod() is used to set the onClickListener to the floating action button used in the activity.*/
+    /*The setOnClickListenerMethod() method sets the onClickListener to the floating action button used in the activity.*/
     private void setOnClickListenerMethod() {
         activityAddEditNoteBinding.doneFloatingActionButton.setOnClickListener(this);
     }
 
-    /*The onClick(...) method allows us to intercept all the clicks performed in this current activity.
-     * When the floating action button is clicked, first the hideKeyboardMethod() is executed.
-     * Next, the checkIfEditTextBlank() method is triggered to check if the EditText is blank.
-     * If the EditText isn't blank, the title, content, and date values are retrieved and sent to the initializeSaveMethod(...).*/
+    /*The onClick(...) method intercepts all clicks performed in the current activity.
+     * When the floating action button is clicked, the hideKeyboardMethod() method is executed and the keyboard is hidden.
+     * The next function is performed depending on the value present in the activityFunction variable.
+     * If the value is "insert", note title, content, and date values are extracted and passed on to the initializeSaveMethod(...) method.
+     * If the value is "edit", the currentNoteEntity title and content values are replaced with new values and passed on to the
+     *      initializeUpdateMethod() method.
+     * Before performing any of these functions, a check is performed using the checkIfEditTextNotBlank() method to ensure that
+     *      the titleEditText isn't blank.*/
     @Override
     public void onClick(View view) {
         if (view == activityAddEditNoteBinding.doneFloatingActionButton) {
             hideKeyboardMethod();
 
             if (activityFunction.equals("insert")) {
-                if (checkIfEditTextBlank()) {
+                if (checkIfEditTextNotBlank()) {
                     String title = activityAddEditNoteBinding.titleEditText.getText().toString();
                     String content = activityAddEditNoteBinding.contentEditText.getText().toString();
                     String date = new SimpleDateFormat("MMMM dd", Locale.UK).format(Calendar.getInstance().getTime());
@@ -106,14 +117,16 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
             }
 
             if (activityFunction.equals("edit")) {
-                if (checkIfEditTextBlank()) {
+                if (checkIfEditTextNotBlank()) {
+                    currentNoteEntity.setTitle(activityAddEditNoteBinding.titleEditText.getText().toString());
+                    currentNoteEntity.setContent(activityAddEditNoteBinding.contentEditText.getText().toString());
                     initializeUpdateMethod(currentNoteEntity);
                 }
             }
         }
     }
 
-    /*The hideKeyboardMethod() is used to hide the keyboard from the screen.*/
+    /*The hideKeyboardMethod() hides the keyboard from the screen.*/
     private void hideKeyboardMethod() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -122,8 +135,8 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    /*The checkIfEditTextBlank() method is used to check if the EditText is empty or not.*/
-    private boolean checkIfEditTextBlank() {
+    /*The checkIfEditTextBlank() method is called to check if the titleEditText is empty or not*/
+    private boolean checkIfEditTextNotBlank() {
         if (activityAddEditNoteBinding.titleEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Title Cannot Be Empty", Toast.LENGTH_SHORT).show();
             return false;
@@ -132,10 +145,9 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         return true;
     }
 
-    /*The initializeSaveMethod(...) is used for saving the new note that has been created.
-     * When the method is triggered, it receives the title, the content, and the date on which the note was created.
-     * Next, all these values are packed into a single object that passed on to the ViewModel to be saved into the database.
-     * Once this happens, the activity is closed and the NotesActivity is brought back into view. */
+    /*The initializeSaveMethod(...) saves a new note into the database.
+     * When triggered, it fetches the title, content, and date parameters and binds them into a single NotesEntity object.
+     * Finally, this NotesEntity object is inserted into the database and the activity is removed from view.*/
     private void initializeSaveMethod(String title, String content, String date) {
         NotesEntity notesEntity = new NotesEntity();
         notesEntity.setTitle(title);
@@ -146,9 +158,10 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         finish();
     }
 
+    /*The initializeUpdateMethod(...) updates an existing note in the database.
+     * The NotesEntity instance parameter already contains the updated details for the note.
+     * This instance passed within the ViewModel's update method to be inserted into the database and the activity is closed.*/
     private void initializeUpdateMethod(NotesEntity notesEntity) {
-        notesEntity.setTitle(activityAddEditNoteBinding.titleEditText.getText().toString());
-        notesEntity.setContent(activityAddEditNoteBinding.contentEditText.getText().toString());
         addEditNoteActivityViewModel.updateNoteMethod(notesEntity);
         finish();
     }
