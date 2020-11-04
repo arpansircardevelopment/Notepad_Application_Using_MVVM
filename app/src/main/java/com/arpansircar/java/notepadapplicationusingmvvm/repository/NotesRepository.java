@@ -22,7 +22,7 @@ public class NotesRepository {
     /*The NotesDAO instance is initialized in the constructor itself.
      * As a result of this, as soon as this NotesRepository class is initialized, the NotesDAO instance is initialized too.*/
     public NotesRepository() {
-        notesDAO = NotesDatabase.notesDatabase.notesDAO();
+        notesDAO = NotesDatabase.getInstance().notesDAO();
     }
 
     /*The insertNoteMethod(...) repository method connects to the insertNote(...) method of the NoteDAO interface.

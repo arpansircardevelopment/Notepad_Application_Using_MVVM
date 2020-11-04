@@ -20,7 +20,7 @@ public abstract class NotesDatabase extends RoomDatabase {
     public abstract NotesDAO notesDAO();
 
     /*The notesDatabase instance will used for storing a single database instance using the initializeDatabase(...) method.*/
-    public static NotesDatabase notesDatabase = null;
+    private static NotesDatabase notesDatabase = null;
 
     /*The initializeDatabase(...) method is a singleton method.
      * This method will be used for creating an instance of RoomDatabase, only if there isn't a instance of the database already present.
@@ -36,7 +36,7 @@ public abstract class NotesDatabase extends RoomDatabase {
     }
 
     /*Once the database instance is created, the getInstance() method will be used to return the database instance.*/
-    public NotesDatabase getInstance() {
+    public static NotesDatabase getInstance() {
         return notesDatabase;
     }
 }
