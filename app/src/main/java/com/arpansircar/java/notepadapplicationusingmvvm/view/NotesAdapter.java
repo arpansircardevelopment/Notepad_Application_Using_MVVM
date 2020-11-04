@@ -80,8 +80,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
          * Next, the noteID is acquired from the object and is sent to the NotesActivity via the INotesActivity interface.*/
         @Override
         public void onClick(View view) {
-            NotesEntity notesEntity = notesEntityList.get(getAdapterPosition());
-            iNotesActivity.onNoteClicked(notesEntity.getId());
+            iNotesActivity.onNoteClicked(notesEntityList.get(getAdapterPosition()));
         }
     }
 }

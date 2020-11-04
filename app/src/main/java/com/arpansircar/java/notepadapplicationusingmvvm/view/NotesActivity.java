@@ -1,5 +1,9 @@
 package com.arpansircar.java.notepadapplicationusingmvvm.view;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -7,12 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.ActivityNotesBinding;
+import com.arpansircar.java.notepadapplicationusingmvvm.model.Constants;
 import com.arpansircar.java.notepadapplicationusingmvvm.model.INotesActivity;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesDatabase;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
@@ -102,7 +103,9 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         if (view == activityNotesBinding.newNoteFloatingActionButton) {
-            startActivity(new Intent(NotesActivity.this, AddEditNoteActivity.class));
+            Intent newNoteIntent = new Intent(NotesActivity.this, AddEditNoteActivity.class);
+            newNoteIntent.putExtra("function", "insert");
+            startActivity(newNoteIntent);
         }
     }
 
@@ -112,9 +115,9 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
      * Within this object, the noteID of the clicked note is sent as an Integer extra to next activity.
      * Finally, the activity is started.*/
     @Override
-    public void onNoteClicked(int noteID) {
+    public void onNoteClicked(NotesEntity notesEntity) {
         Intent intent = new Intent(NotesActivity.this, DisplayNoteActivity.class);
-        intent.putExtra("noteID", noteID);
+        intent.putExtra(Constants.COLUMN_ID, notesEntity.getId());
         startActivity(intent);
     }
 }

@@ -11,10 +11,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.ActivityDisplayNoteBinding;
+import com.arpansircar.java.notepadapplicationusingmvvm.model.Constants;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.DisplayNoteActivityViewModel;
 
@@ -25,7 +27,7 @@ import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.DisplayNoteAct
  * From this activity, the user can perform functions such as editing that particular note and deleting it if required.
  * All such changes performed are reflected back in the NotesActivity.
  */
-public class DisplayNoteActivity extends AppCompatActivity {
+public class DisplayNoteActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityDisplayNoteBinding activityDisplayNoteBinding;
     private NotesEntity currentNoteEntity;
@@ -54,6 +56,7 @@ public class DisplayNoteActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        setOnClickListenerMethod();
         startObserver();
     }
 
@@ -107,6 +110,10 @@ public class DisplayNoteActivity extends AppCompatActivity {
         displayNoteActivityViewModel.selectNoteMethod(getIntentData()).observe(this, notesEntityObserver);
     }
 
+    private void setOnClickListenerMethod() {
+        activityDisplayNoteBinding.editNoteFloatingActionButton.setOnClickListener(this);
+    }
+
     /*The setNoteInActivity(...) method sets the data from the NotesEntity object within the activity.
      * This method is triggered when there's a change in the LiveData object in the database.
      * The method contains a try-catch to check and handle a NullPointerException that arises when the note is deleted.
@@ -128,7 +135,7 @@ public class DisplayNoteActivity extends AppCompatActivity {
      * This note value is returned to the startObserver() method to fetch the note from the database.*/
     private int getIntentData() {
         Intent intent = getIntent();
-        return intent.getIntExtra("noteID", -1);
+        return intent.getIntExtra(Constants.COLUMN_ID, -1);
     }
 
     /*The deleteNoteMethod() is used for deleting a note from the database as well as from the activity.
@@ -137,5 +144,19 @@ public class DisplayNoteActivity extends AppCompatActivity {
     private void deleteNoteMethod() {
         displayNoteActivityViewModel.deleteNoteMethod(currentNoteEntity);
         Toast.makeText(this, "Note Deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == activityDisplayNoteBinding.editNoteFloatingActionButton) {
+            Intent editNoteIntent = new Intent(DisplayNoteActivity.this, AddEditNoteActivity.class);
+            editNoteIntent.putExtra("function", "edit");
+            editNoteIntent.putExtra(Constants.COLUMN_ID, currentNoteEntity.getId());
+            editNoteIntent.putExtra(Constants.COLUMN_NAME_TITLE, currentNoteEntity.getTitle());
+            editNoteIntent.putExtra(Constants.COLUMN_NAME_CONTENT, currentNoteEntity.getContent());
+            editNoteIntent.putExtra(Constants.COLUMN_NAME_DATE, currentNoteEntity.getDate());
+
+            startActivity(editNoteIntent);
+        }
     }
 }

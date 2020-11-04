@@ -5,6 +5,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
 import com.arpansircar.java.notepadapplicationusingmvvm.databinding.ActivityAddEditNoteBinding;
+import com.arpansircar.java.notepadapplicationusingmvvm.model.Constants;
 import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.AddEditNoteActivityViewModel;
 
@@ -28,6 +30,8 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
 
     private ActivityAddEditNoteBinding activityAddEditNoteBinding;
     private AddEditNoteActivityViewModel addEditNoteActivityViewModel;
+    private NotesEntity currentNoteEntity;
+    private String activityFunction;
 
     /*The onCreate method is the first method that is executed when the application starts up.
      * Usually, in this method, such functions are executed that are to be performed only once.
@@ -38,6 +42,8 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityAddEditNoteBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_edit_note);
+        currentNoteEntity = new NotesEntity();
+        getIntentData();
         initializeViewModel();
     }
 
@@ -47,6 +53,28 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
     protected void onStart() {
         super.onStart();
         setOnClickListenerMethod();
+    }
+
+    private void getIntentData() {
+        Intent intent = getIntent();
+        activityFunction = intent.getStringExtra("function");
+
+        if (activityFunction.equals("edit")) {
+            currentNoteEntity.setId(intent.getIntExtra(Constants.COLUMN_ID, -1));
+            currentNoteEntity.setTitle(intent.getStringExtra(Constants.COLUMN_NAME_TITLE));
+            currentNoteEntity.setContent(intent.getStringExtra(Constants.COLUMN_NAME_CONTENT));
+            currentNoteEntity.setDate(intent.getStringExtra(Constants.COLUMN_NAME_DATE));
+            setNoteInActivity(currentNoteEntity);
+        }
+    }
+
+    private void setNoteInActivity(NotesEntity notesEntity) {
+        try {
+            activityAddEditNoteBinding.titleEditText.setText(notesEntity.getTitle());
+            activityAddEditNoteBinding.contentEditText.setText(notesEntity.getContent());
+        } catch (NullPointerException nullPointerException) {
+            finish();
+        }
     }
 
     /*The initializeViewModel() method is used for initializing the AddEditNoteActivityViewModel instance with the ViewModel class.*/
@@ -68,11 +96,19 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         if (view == activityAddEditNoteBinding.doneFloatingActionButton) {
             hideKeyboardMethod();
 
-            if (checkIfEditTextBlank()) {
-                String title = activityAddEditNoteBinding.titleEditText.getText().toString();
-                String content = activityAddEditNoteBinding.contentEditText.getText().toString();
-                String date = new SimpleDateFormat("MMMM dd", Locale.UK).format(Calendar.getInstance().getTime());
-                initializeSaveMethod(title, content, date);
+            if (activityFunction.equals("insert")) {
+                if (checkIfEditTextBlank()) {
+                    String title = activityAddEditNoteBinding.titleEditText.getText().toString();
+                    String content = activityAddEditNoteBinding.contentEditText.getText().toString();
+                    String date = new SimpleDateFormat("MMMM dd", Locale.UK).format(Calendar.getInstance().getTime());
+                    initializeSaveMethod(title, content, date);
+                }
+            }
+
+            if (activityFunction.equals("edit")) {
+                if (checkIfEditTextBlank()) {
+                    initializeUpdateMethod(currentNoteEntity);
+                }
             }
         }
     }
@@ -107,6 +143,13 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         notesEntity.setDate(date);
 
         addEditNoteActivityViewModel.insertNoteMethod(notesEntity);
+        finish();
+    }
+
+    private void initializeUpdateMethod(NotesEntity notesEntity) {
+        notesEntity.setTitle(activityAddEditNoteBinding.titleEditText.getText().toString());
+        notesEntity.setContent(activityAddEditNoteBinding.contentEditText.getText().toString());
+        addEditNoteActivityViewModel.updateNoteMethod(notesEntity);
         finish();
     }
 }
