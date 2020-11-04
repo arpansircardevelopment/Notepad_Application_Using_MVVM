@@ -21,11 +21,10 @@ import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.DisplayNoteActivityViewModel;
 
 /**
- * The DisplayNoteActivity is tasked with the complete contents of a single note.
- * When the user clicks on a particular note in the RecyclerView in NotesActivity, the user is guided to this activity.
- * Moreover, the note that they tapped on is displayed in this activity.
- * From this activity, the user can perform functions such as editing that particular note and deleting it if required.
- * All such changes performed are reflected back in the NotesActivity.
+ * The DisplayNoteActivity displays the contents of a single note.
+ * Upon clicking a certain note in the NotesActivity RecyclerView, the user is guided to this activity and the selected note is displayed here.
+ * In this activity, the user can view, delete, or update the particular note as required.
+ * All such changes are reflected back in the NotesActivity.
  */
 public class DisplayNoteActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,13 +32,12 @@ public class DisplayNoteActivity extends AppCompatActivity implements View.OnCli
     private NotesEntity currentNoteEntity;
     private DisplayNoteActivityViewModel displayNoteActivityViewModel;
 
-    /*The onCreate method is the first method that is executed when the application starts up.
-     * Usually, in this method, such functions are executed that are to be performed only once.
-     * In this method, I've defined two methods to be executed as soon as the application starts up.
-     * The setToolbarMethod() will be used for setting the toolbar. This toolbar will contain the functionality for deleting the note.
-     * The getIntentData() method will be used for extracting the noteID which was sent as an Extra via the Intent.
-     * Finally, the initializeViewModel() method is used to create an instance of the ViewModel class associated with this activity.
-     * This ViewModel will be used to handle any configuration changes. */
+    /*The onCreate method is the first method to be executed when the application starts up.
+     * Here, those methods are called that are to be executed only once.
+     * This particular method executes the setToolbarMethod(), getIntentData(), and initializeViewModel() methods.
+     * The setToolbarMethod() sets the toolbar which contains the functionality for deleting a note.
+     * The getIntentData() fetches complete note details including the note id, title, content, and date.
+     * The initializeViewModel() method creates an instance of the AddEditNoteActivityViewModel class.*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,28 +47,28 @@ public class DisplayNoteActivity extends AppCompatActivity implements View.OnCli
         initializeViewModel();
     }
 
-    /*The onStart() is the next method executed after the onCreate() callback method.
-     * In this method, the application is made visible to the user as the application begins to enter into the foreground.
-     * The onStart() method executes only one method, namely the startObserver() method.
-     * The setObserverMethod() method is used to activate the Observer and observe any changes arising from the LiveData object. */
+    /*onStart() lifecycle callback method is executed after onCreate().
+     * In this callback method, two methods are executed.
+     * The setObserver() method activates the observer to check any changes arising within the LiveData object.
+     * The setOnClickListenerMethod() intercepts any clicks occurring within the activity.*/
     @Override
     protected void onStart() {
         super.onStart();
-        setOnClickListenerMethod();
         startObserver();
+        setOnClickListenerMethod();
     }
 
-    /*The onCreateOptionsMenu(...) is used for creating the menu options in the toolbar.
-     * In this particular activity, a single menu option is used for providing the functionality to delete the note being viewed.*/
+    /*The onCreateOptionsMenu(...) creates the menu options in the toolbar.
+     * Here, a single menu option is used to delete the note being viewed.*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.display_note_menu, menu);
         return true;
     }
 
-    /*The onOptionsItemSelected(...) method is used to intercepting the clicks when the user taps on a particular menu option.
-     * This activity will contain only a single menu option, i.e., a menu option to delete the particular note being viewed.
-     * As a result, this method also checks for a single menu option being tapped, i.e., the delete menu option.*/
+    /*The onOptionsItemSelected(...) method intercepting the clicks occurring on the menu options.
+     * Here, a single menu option will be displayed to allow the user to delete the particular note being viewed.
+     * Upon being pressed, this delete option will trigger the deleteNoteMethod() and the activity will be removed from the view.*/
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -83,24 +81,19 @@ public class DisplayNoteActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    /*The setToolbarMethod() will be used for displaying the custom toolbar in the activity.
-     * In this method, the toolbar instance is assigned to the custom toolbar layout.
-     * Next, the required title is assigned to this toolbar instance.
-     * Finally, this toolbar is set into the activity.*/
+    /*The setToolbarMethod() sets the custom toolbar in the activity.*/
     private void setToolbarMethod() {
         Toolbar toolbar = activityDisplayNoteBinding.toolbar.activityToolbar;
         toolbar.setTitle(R.string.display_activity_sample_text);
         setSupportActionBar(toolbar);
     }
 
-    /*The initializeViewModel() is used to create an instance to the DisplayNoteActivityViewModel.
-     * This ViewModel instance will be used for communicating with the database as well as handling any configuration changes.*/
+    /*The initializeViewModel() creates an instance to the DisplayNoteActivityViewModel for communicating with the database.*/
     private void initializeViewModel() {
         displayNoteActivityViewModel = new ViewModelProvider(this).get(DisplayNoteActivityViewModel.class);
     }
 
-    /*The setObserverMethod() method is used simply for activating the observer.
-     * Whenever any changes are performed in the database, the observer observes these changes and accordingly performs changes in this activity.*/
+    /*The setObserverMethod() method is used simply activates the observer.*/
     private void startObserver() {
         final Observer<NotesEntity> notesEntityObserver = notesEntity -> {
             this.currentNoteEntity = notesEntity;
@@ -110,17 +103,17 @@ public class DisplayNoteActivity extends AppCompatActivity implements View.OnCli
         displayNoteActivityViewModel.selectNoteMethod(getIntentData()).observe(this, notesEntityObserver);
     }
 
+    /*The setOnClickListenerMethod() method sets the onClickListener to the floating action button used in the activity.*/
     private void setOnClickListenerMethod() {
         activityDisplayNoteBinding.editNoteFloatingActionButton.setOnClickListener(this);
     }
 
-    /*The setNoteInActivity(...) method sets the data from the NotesEntity object within the activity.
-     * This method is triggered when there's a change in the LiveData object in the database.
-     * The method contains a try-catch to check and handle a NullPointerException that arises when the note is deleted.
-     * The observer observes a change when the note is deleted. Therefore, it tries to fetch the note details using the noteID.
-     * However, this isn't possible as the note is already deleted from the database. And this causes a NullPointerException causing the app to crash.
-     * With the help of the try-catch block, the app simply guides the user to the previous, i.e., NotesActivity.java class.
-     * Apart from this, the user is shown a Toast message that signifies that the note has been deleted.*/
+    /*The setNoteInActivity(...) method sets the NotesEntity instance within the activity.
+     * The method is triggered by any changes occurring within the LiveData instance.
+     * A try-catch block is placed to handle the NullPointerExceptions that arise when a note is deleted.
+     * The NullPointerException occurs as the observer observes a change and tries to fetch the changed note.
+     * But this isn't possible as the note has already been deleted from the database, causing the exception.
+     * Therefore, the catch block handles the exception by removing the activity from view and showing a Toast message.*/
     private void setNoteInActivity(NotesEntity notesEntity) {
         try {
             activityDisplayNoteBinding.titleTextView.setText(notesEntity.getTitle());
@@ -130,22 +123,22 @@ public class DisplayNoteActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    /*The getIntentData() method is used for extracting the data from the intent object.
-     * This intent contains the noteID of the selected note.
-     * This note value is returned to the startObserver() method to fetch the note from the database.*/
+    /*The getIntentData() method extracts the noteID from the intent.*/
     private int getIntentData() {
         Intent intent = getIntent();
         return intent.getIntExtra(Constants.COLUMN_ID, -1);
     }
 
-    /*The deleteNoteMethod() is used for deleting a note from the database as well as from the activity.
-     * The method is triggered when the user presses the delete menu option in the toolbar.
-     * When this event occurs, the onOptionsItemSelected() method triggers this event.*/
+    /*The deleteNoteMethod() deletes a note from the database and the NotesActivity.
+     * The method is triggered by the onOptionsItemSelected() method when the user presses the delete menu option in the toolbar.*/
     private void deleteNoteMethod() {
         displayNoteActivityViewModel.deleteNoteMethod(currentNoteEntity);
         Toast.makeText(this, "Note Deleted", Toast.LENGTH_SHORT).show();
     }
 
+    /*The onClick(...) method intercepts all clicks performed in the current activity.
+     * When the floating action button is clicked, the "edit" function, note id, title, content, and date is bundled into the intent as extras.
+     * Finally, this data is sent into the AddEditNoteActivity and the activity is started.*/
     @Override
     public void onClick(View view) {
         if (view == activityDisplayNoteBinding.editNoteFloatingActionButton) {
