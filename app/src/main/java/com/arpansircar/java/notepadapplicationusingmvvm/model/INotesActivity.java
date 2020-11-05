@@ -12,4 +12,6 @@ public interface INotesActivity {
      * It is used to transfer the data from the RecyclerView to the onNoteClicked method in the NotesActivity.
      * Using this data, the DisplayNoteActivity.java is triggered.*/
     void onNoteClicked(NotesEntity notesEntity);
+
+    void onNoteSwiped(int position);
 }

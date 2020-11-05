@@ -3,12 +3,14 @@ package com.arpansircar.java.notepadapplicationusingmvvm.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +35,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
 
     private ActivityNotesBinding activityNotesBinding;
     private NotesActivityViewModel notesActivityViewModel;
+    private List<NotesEntity> notesEntityList;
 
     /*The onCreate method is the first method that is executed when the application starts up.
      * Usually, in this method, such functions are executed that are to be performed only once.
@@ -78,7 +81,10 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
      * This task is done at the Started state of the activity to allow it to start observing the changes in the LiveData as soon as the activity starts.
      * If there are any changes in the database, i.e., if it returns a List of NotesEntity objects, the list is sent to the setRecyclerViewMethod().*/
     private void setObserverMethod() {
-        final Observer<List<NotesEntity>> observer = this::setRecyclerViewMethod;
+        final Observer<List<NotesEntity>> observer = notesEntityList -> {
+            this.notesEntityList = notesEntityList;
+            setRecyclerViewMethod(notesEntityList);
+        };
         notesActivityViewModel.selectAllNotesMethod().observe(this, observer);
     }
 
@@ -91,6 +97,8 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(false);
         recyclerView.setAdapter(notesAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(this));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /*The setOnClickListenerMethod() is used to set the onClickListener to all the floating action buttons used in the activity.*/
@@ -130,6 +138,12 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = new Intent(NotesActivity.this, DisplayNoteActivity.class);
         intent.putExtra(Constants.COLUMN_ID, notesEntity.getId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onNoteSwiped(int position) {
+        notesActivityViewModel.deleteNoteMethod(notesEntityList.get(position));
+        Toast.makeText(this, "Note Deleted", Toast.LENGTH_SHORT).show();
     }
 
     private AlertDialog showAlertDialogMethod(String function, String title, String message) {

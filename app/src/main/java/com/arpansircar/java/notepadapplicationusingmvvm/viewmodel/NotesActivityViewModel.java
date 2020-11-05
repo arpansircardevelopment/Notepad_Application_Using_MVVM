@@ -29,4 +29,8 @@ public class NotesActivityViewModel extends ViewModel {
         notesRepository.deleteAllNotesMethod();
     }
 
+    public void deleteNoteMethod(NotesEntity notesEntity) {
+        notesRepository.deleteNoteMethod(notesEntity);
+    }
+
 }
