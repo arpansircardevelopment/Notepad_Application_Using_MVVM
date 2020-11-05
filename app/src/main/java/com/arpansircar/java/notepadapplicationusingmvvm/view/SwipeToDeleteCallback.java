@@ -11,7 +11,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     private final INotesActivity iNotesActivity;
 
     public SwipeToDeleteCallback(INotesActivity iNotesActivity) {
-        super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        super(0, ItemTouchHelper.RIGHT);
         this.iNotesActivity = iNotesActivity;
     }
 
