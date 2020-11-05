@@ -9,4 +9,10 @@
     <string name="delete_menu_string">Delete</string>
     <string name="display_activity_sample_text">Display Activity</string>
     <string name="edit_note">Edit Note</string>
+    <string name="delete_all_notes_alert_message">Are you sure that you want to delete all notes?</string>
+    <string name="delete_all_notes_alert_title">Delete All Notes</string>
+    <string name="yes_string">Yes</string>
+    <string name="no_string">No</string>
+    <string name="exit_title">Exit</string>
+    <string name="exit_message">Do you want to exit?</string>
 </resources>

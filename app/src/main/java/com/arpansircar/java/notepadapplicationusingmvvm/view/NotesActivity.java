@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -20,6 +21,7 @@ import com.arpansircar.java.notepadapplicationusingmvvm.room.NotesEntity;
 import com.arpansircar.java.notepadapplicationusingmvvm.viewmodel.NotesActivityViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The NotesActivity is the primary activity in the entire applications.
@@ -91,9 +93,10 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         recyclerView.setAdapter(notesAdapter);
     }
 
-    /*The setOnClickListenerMethod() is used to set the onClickListener to the floating action button used in the activity.*/
+    /*The setOnClickListenerMethod() is used to set the onClickListener to all the floating action buttons used in the activity.*/
     private void setOnClickListenerMethod() {
         activityNotesBinding.newNoteFloatingActionButton.setOnClickListener(this);
+        activityNotesBinding.deleteAllNotesFloatingActionButton.setOnClickListener(this);
     }
 
     /*The onClick(...) method allows us to intercept all the clicks placed within this method.
@@ -107,6 +110,14 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
             newNoteIntent.putExtra("function", "insert");
             startActivity(newNoteIntent);
         }
+
+        if (view == activityNotesBinding.deleteAllNotesFloatingActionButton) {
+            AlertDialog alertDialog = showAlertDialogMethod(
+                    "delete_all",
+                    getString(R.string.delete_all_notes_alert_title),
+                    getString(R.string.delete_all_notes_alert_message));
+            alertDialog.show();
+        }
     }
 
     /*The onNoteClicked(...) method here is an overridden method from the INotesActivity interface.
@@ -119,5 +130,33 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = new Intent(NotesActivity.this, DisplayNoteActivity.class);
         intent.putExtra(Constants.COLUMN_ID, notesEntity.getId());
         startActivity(intent);
+    }
+
+    private AlertDialog showAlertDialogMethod(String function, String title, String message) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.yes_string, (dialogInterface, i) -> {
+                    if (Objects.equals(function, "exit"))
+                        super.onBackPressed();
+
+                    if (Objects.equals(function, "delete_all"))
+                        notesActivityViewModel.deleteAllNotesMethod();
+                })
+
+                .setNegativeButton(R.string.no_string, (dialogInterface, i) -> dialogInterface.cancel());
+
+        return alertDialogBuilder.create();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog alertDialog = showAlertDialogMethod(
+                "exit",
+                getString(R.string.exit_title),
+                getString(R.string.exit_message));
+
+        alertDialog.show();
     }
 }
