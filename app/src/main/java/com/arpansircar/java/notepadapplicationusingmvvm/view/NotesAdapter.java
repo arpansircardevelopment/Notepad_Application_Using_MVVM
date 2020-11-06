@@ -25,12 +25,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
     private final List<NotesEntity> notesEntityList;
     private final INotesActivity iNotesActivity;
-    private static MutableLiveData<Integer> recyclerViewSize;
+    private static final MutableLiveData<Integer> recyclerViewSize = new MutableLiveData<>();
+
 
     public NotesAdapter(List<NotesEntity> notesEntityList, INotesActivity iNotesActivity) {
         this.notesEntityList = notesEntityList;
         this.iNotesActivity = iNotesActivity;
-        recyclerViewSize = new MutableLiveData<>();
     }
 
     /*The onCreateViewHolder() method configures and returns the views for all the different objects present in the List.*/
