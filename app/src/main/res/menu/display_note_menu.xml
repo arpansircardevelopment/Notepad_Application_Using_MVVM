@@ -6,6 +6,6 @@
         android:id="@+id/delete_menu_option"
         android:icon="@drawable/ic_delete"
         android:title="@string/delete_menu_string"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>

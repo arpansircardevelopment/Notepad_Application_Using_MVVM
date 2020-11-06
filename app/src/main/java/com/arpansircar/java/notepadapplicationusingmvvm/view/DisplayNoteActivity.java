@@ -84,7 +84,6 @@ public class DisplayNoteActivity extends AppCompatActivity implements View.OnCli
     /*The setToolbarMethod() sets the custom toolbar in the activity.*/
     private void setToolbarMethod() {
         Toolbar toolbar = activityDisplayNoteBinding.toolbar.activityToolbar;
-        toolbar.setTitle(R.string.display_activity_sample_text);
         setSupportActionBar(toolbar);
     }
 

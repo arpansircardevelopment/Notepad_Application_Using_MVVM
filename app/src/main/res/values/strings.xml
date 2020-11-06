@@ -7,8 +7,9 @@
     <string name="enter_title_hint_string">Enter note title</string>
     <string name="enter_content_hint_string">Enter note content</string>
     <string name="delete_menu_string">Delete</string>
-    <string name="display_activity_sample_text">Display Activity</string>
+    <string name="display_activity_title">Note Details</string>
     <string name="edit_note">Edit Note</string>
+    <string name="new_note_title">New Note</string>
     <string name="delete_all_notes_alert_message">Are you sure that you want to delete all notes?</string>
     <string name="delete_all_notes_alert_title">Delete All Notes</string>
     <string name="yes_string">Yes</string>

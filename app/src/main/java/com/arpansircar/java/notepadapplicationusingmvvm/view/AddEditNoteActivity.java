@@ -1,6 +1,7 @@
 package com.arpansircar.java.notepadapplicationusingmvvm.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -45,6 +46,7 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         activityAddEditNoteBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_edit_note);
         currentNoteEntity = new NotesEntity();
         getIntentData();
+        setToolbarTitle();
         initializeViewModel();
     }
 
@@ -70,6 +72,15 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
             currentNoteEntity.setContent(intent.getStringExtra(Constants.COLUMN_NAME_CONTENT));
             currentNoteEntity.setDate(intent.getStringExtra(Constants.COLUMN_NAME_DATE));
             setNoteInActivity(currentNoteEntity);
+        }
+    }
+
+    private void setToolbarTitle() {
+        Toolbar toolbar = activityAddEditNoteBinding.toolbar.activityToolbar;
+        if (Objects.equals(activityFunction, "insert")) {
+            toolbar.setTitle(R.string.new_note_title);
+        } else {
+            toolbar.setTitle(R.string.edit_note);
         }
     }
 

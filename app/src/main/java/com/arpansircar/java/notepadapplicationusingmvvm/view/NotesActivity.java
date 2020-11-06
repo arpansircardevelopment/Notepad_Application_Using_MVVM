@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -50,6 +51,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         activityNotesBinding = DataBindingUtil.setContentView(this, R.layout.activity_notes);
         initializeDatabase();
         initializeViewModel();
+        setToolbar();
         showHideRecyclerViewButton();
     }
 
@@ -76,6 +78,11 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     /*The initializeViewModel() method is used for initializing the NotesActivityViewModel instance with the ViewModel class.*/
     private void initializeViewModel() {
         notesActivityViewModel = new ViewModelProvider(this).get(NotesActivityViewModel.class);
+    }
+
+    private void setToolbar() {
+        Toolbar toolbar = activityNotesBinding.toolbar.activityToolbar;
+        setSupportActionBar(toolbar);
     }
 
     /*The setObserverMethod() method is used simply for activating the observer.
