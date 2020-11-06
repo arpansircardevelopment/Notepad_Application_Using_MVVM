@@ -58,6 +58,12 @@ public class DisplayNoteActivity extends AppCompatActivity implements View.OnCli
         setOnClickListenerMethod();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        activityDisplayNoteBinding = null;
+    }
+
     /*The onCreateOptionsMenu(...) creates the menu options in the toolbar.
      * Here, a single menu option is used to delete the note being viewed.*/
     @Override
@@ -84,6 +90,7 @@ public class DisplayNoteActivity extends AppCompatActivity implements View.OnCli
     /*The setToolbarMethod() sets the custom toolbar in the activity.*/
     private void setToolbarMethod() {
         Toolbar toolbar = activityDisplayNoteBinding.toolbar.activityToolbar;
+        toolbar.setTitle(R.string.display_activity_title);
         setSupportActionBar(toolbar);
     }
 

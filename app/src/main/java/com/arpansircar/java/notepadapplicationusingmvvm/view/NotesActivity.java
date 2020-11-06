@@ -52,7 +52,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         initializeDatabase();
         initializeViewModel();
         setToolbar();
-        showHideRecyclerViewButton();
+        showHideDeleteAllNotesButtonButton();
     }
 
     /*The onStart() is the next method executed after the onCreate() callback method.
@@ -80,8 +80,10 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         notesActivityViewModel = new ViewModelProvider(this).get(NotesActivityViewModel.class);
     }
 
+    /*The setToolbar is used to set the toolbar title for this particular activity.*/
     private void setToolbar() {
         Toolbar toolbar = activityNotesBinding.toolbar.activityToolbar;
+        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
     }
 
@@ -115,7 +117,10 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         activityNotesBinding.deleteAllNotesFloatingActionButton.setOnClickListener(this);
     }
 
-    private void showHideRecyclerViewButton() {
+    /*The showHideDeleteAllNotesButton() is used for displaying the deleteAllNotesFloatingActionButton.
+     * The method contains an observer that observers the size of the RecyclerView in the RecyclerViewAdapter class via a MutableLiveData instance.
+     * If the RecyclerView is empty, this button is set to invisible, else the button is displayed to the user for deleting the notes.*/
+    private void showHideDeleteAllNotesButtonButton() {
         final Observer<Integer> recyclerViewSizeObserver = integer -> {
             if (integer == 0)
                 activityNotesBinding.deleteAllNotesFloatingActionButton.setVisibility(View.INVISIBLE);
@@ -159,12 +164,17 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
     }
 
+    /*The onNoteSwiped interface method is used for fetching the location of the note swiped by the user.
+     * When the user swipes a particular note, we can get the position from which the note was deleted.
+     * This position is used to fetch the NotesEntity object from the list of NotesEntity present in this class.
+     * Finally, the deleteNoteMethod is triggered using this object. */
     @Override
     public void onNoteSwiped(int position) {
         notesActivityViewModel.deleteNoteMethod(notesEntityList.get(position));
         Toast.makeText(this, "Note Deleted", Toast.LENGTH_SHORT).show();
     }
 
+    /*The showAlertDialogMethod() is used for creating AlertDialogs throughout this activity.*/
     private AlertDialog showAlertDialogMethod(String function, String title, String message) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
@@ -183,6 +193,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         return alertDialogBuilder.create();
     }
 
+    /*The onBackPressed method is used for handling events that occur when the back button is pressed.*/
     @Override
     public void onBackPressed() {
         AlertDialog alertDialog = showAlertDialogMethod(
