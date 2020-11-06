@@ -75,11 +75,17 @@ public class AddEditNoteActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    /*The setToolbarTitle() method is used for setting the title of the toolbar within the AddEditNoteActivity.
+     * The method first checks the operation being performed.
+     * If the method finds out the activityFunction to be "insert", it displays the title as "New Note".
+     * If the method finds out the activityFunction to be "edit", it displays the title as "Edit Note".*/
     private void setToolbarTitle() {
         Toolbar toolbar = activityAddEditNoteBinding.toolbar.activityToolbar;
         if (Objects.equals(activityFunction, "insert")) {
             toolbar.setTitle(R.string.new_note_title);
-        } else {
+        }
+
+        if (Objects.equals(activityFunction, "edit")) {
             toolbar.setTitle(R.string.edit_note);
         }
     }
