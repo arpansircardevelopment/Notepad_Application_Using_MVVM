@@ -50,6 +50,7 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
         activityNotesBinding = DataBindingUtil.setContentView(this, R.layout.activity_notes);
         initializeDatabase();
         initializeViewModel();
+        showHideRecyclerViewButton();
     }
 
     /*The onStart() is the next method executed after the onCreate() callback method.
@@ -105,6 +106,17 @@ public class NotesActivity extends AppCompatActivity implements View.OnClickList
     private void setOnClickListenerMethod() {
         activityNotesBinding.newNoteFloatingActionButton.setOnClickListener(this);
         activityNotesBinding.deleteAllNotesFloatingActionButton.setOnClickListener(this);
+    }
+
+    private void showHideRecyclerViewButton() {
+        final Observer<Integer> recyclerViewSizeObserver = integer -> {
+            if (integer == 0)
+                activityNotesBinding.deleteAllNotesFloatingActionButton.setVisibility(View.INVISIBLE);
+            else
+                activityNotesBinding.deleteAllNotesFloatingActionButton.setVisibility(View.VISIBLE);
+        };
+
+        NotesAdapter.getRecyclerViewSize().observe(this, recyclerViewSizeObserver);
     }
 
     /*The onClick(...) method allows us to intercept all the clicks placed within this method.

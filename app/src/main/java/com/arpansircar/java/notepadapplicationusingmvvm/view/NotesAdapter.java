@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.arpansircar.java.notepadapplicationusingmvvm.R;
@@ -24,10 +25,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
     private final List<NotesEntity> notesEntityList;
     private final INotesActivity iNotesActivity;
+    private static MutableLiveData<Integer> recyclerViewSize;
 
     public NotesAdapter(List<NotesEntity> notesEntityList, INotesActivity iNotesActivity) {
         this.notesEntityList = notesEntityList;
         this.iNotesActivity = iNotesActivity;
+        recyclerViewSize = new MutableLiveData<>();
     }
 
     /*The onCreateViewHolder() method configures and returns the views for all the different objects present in the List.*/
@@ -56,10 +59,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     @Override
     public int getItemCount() {
         if (notesEntityList != null) {
+            recyclerViewSize.postValue(notesEntityList.size());
             return notesEntityList.size();
         } else {
+            recyclerViewSize.postValue(0);
             return 0;
         }
+    }
+
+    public static MutableLiveData<Integer> getRecyclerViewSize() {
+        return recyclerViewSize;
     }
 
     /*The NotesViewHolder class is used to hold each of the views for each of the objects present in the notesEntitiesList list.*/
